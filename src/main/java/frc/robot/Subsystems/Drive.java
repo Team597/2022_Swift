@@ -15,7 +15,7 @@ public class Drive {
     private TalonFX leftMain, leftFollow, rightMain, rightFollow;
 
     //Pneumatic Shifters
-   // private DoubleSolenoid shiftGear;
+    private DoubleSolenoid shiftGear;
 
     //Values for Curvie Drive
     private double m_quickStopThreshold = 0.2;
@@ -42,8 +42,8 @@ public class Drive {
         setBrakeMode(false);
 
         //Set up Pneumatics
-        //shiftGear = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Map.Drive.shiftIn,Map.Drive.shiftOut);
-        //shiftGear.set(Value.kReverse);
+        shiftGear = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Map.Drive.shiftIn,Map.Drive.shiftOut);
+        shiftGear.set(Value.kReverse);
 
 
     }
@@ -65,9 +65,9 @@ public class Drive {
     //Shift the Shifting Shifters - TRUE for SPEED MODE, FALSE for NORMAL MODE
     public void shiftDrive(boolean isShifting){
         if(isShifting){
-           // shiftGear.set(Value.kForward);
+            shiftGear.set(Value.kForward);
         } else{
-           // shiftGear.set(Value.kReverse);
+            shiftGear.set(Value.kReverse);
         }
     }
 

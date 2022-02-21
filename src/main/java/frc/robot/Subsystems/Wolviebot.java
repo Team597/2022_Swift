@@ -32,9 +32,28 @@ public class Wolviebot {
         boolean intake = controller.getAButton();
         boolean outtake = controller.getXButton();
         boolean shooting = (controller.getRightTriggerAxis() > 0.5 ? true : false);
-
-        cargo.ShootingTime(shooting);
+        boolean lowShot = controller.getRightBumper();
+        boolean highShot = controller.getLeftBumper();
+        
+        
+        //Drive the Intake
         cargo.DriveIntake(intake, outtake);
+        
+        //Shooting Time
+        double velocity = 10000;
+        if(cargo.LowShot){
+            velocity = velocity * 0.6;
+        }
+        cargo.VelocityShot(shooting, velocity);
+
+        //Hood Control
+        int whichShot = 0;
+        if(lowShot){
+            whichShot = 1;
+        }else if(highShot){
+            whichShot = 2;
+        }
+        cargo.HoodControl(whichShot);
     }
 
 

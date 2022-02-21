@@ -18,14 +18,17 @@ public class Map{
 
     public static class Intake{
         public static final int //ID for Motors
-            intakeMotor = 4, indexMain = 5, indexShooter = 6,
-            //Chris
-            Shooter_top = 8, Shooter_bottom = 7; 
+            intakeMotor = 4, indexMain = 5, indexShooter = 6; 
         
         public static final int //ID for Pneumatics
             indexerIn = 2, indexerOut = 3;
-        
-
+    }
+    
+    public static class Shooter{
+        public static final int 
+            topShooterMotor = 8, btmShooterMotor = 7;
+        public static final int
+            hoodIn = 4, hoodOut = 5;
     }
 
 }
