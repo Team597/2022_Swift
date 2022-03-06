@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Subsystems.Wolviebot;
@@ -30,6 +31,7 @@ public class Robot extends TimedRobot {
     mainJoystick = new XboxController(Map.Main.mainPad);
     coJoystick = new XboxController(Map.Main.coPad);
     robot = new Wolviebot();
+    CameraServer.startAutomaticCapture();
   }
 
   @Override
