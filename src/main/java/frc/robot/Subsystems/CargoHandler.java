@@ -35,8 +35,8 @@ public class CargoHandler {
         initMotor(shooterBottom);
 
 
-        intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Map.Intake.indexerIn, Map.Intake.indexerOut);
-        hoodSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Map.Shooter.hoodIn, Map.Shooter.hoodOut);
+        intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Map.Intake.indexerIn, Map.Intake.indexerOut);
+        hoodSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Map.Shooter.hoodIn, Map.Shooter.hoodOut);
 
         isShooting = false;
         LowShot = true;
@@ -50,12 +50,12 @@ public class CargoHandler {
         if(intaking){
             intakeSolenoid.set(Value.kForward);
             indexIntakePower = 0.75;
-            intakePower = 0.6;
+            intakePower = 0.9;
             indexShooterPower = 1.0;
         } else if(outaking){
             intakeSolenoid.set(Value.kForward);
             indexIntakePower = -0.75;
-            intakePower = -0.75;
+            intakePower = -0.9;
             indexShooterPower = 1.0;
         } else{
             intakeSolenoid.set(Value.kReverse);
@@ -84,7 +84,7 @@ public class CargoHandler {
             }
             if(BangBang>=10){ //Activates the Belts to feed to shooter
                 indexPower = 0.75;
-                toshooterPower = 0.9;
+                toshooterPower = -0.9;
             }
         } else{
             isShooting = false; //Renable other buttons
@@ -95,12 +95,12 @@ public class CargoHandler {
         if(shooting){ //Sets the motors to velocity mode to shoot
             shooterTop.set(ControlMode.Velocity,-velocity);
             shooterBottom.set(ControlMode.Velocity,velocity);
+            indexerMain.set(ControlMode.PercentOutput, indexPower); //Sets the Indexer Motor
+            indexerShooter.set(ControlMode.PercentOutput, toshooterPower); //Sets the To Shooter Motor
         } else{//Stops Shooter Motors
             shooterTop.set(ControlMode.PercentOutput, -shooterPower);
             shooterBottom.set(ControlMode.PercentOutput,shooterPower);
         }
-        indexerMain.set(ControlMode.PercentOutput, indexPower); //Sets the Indexer Motor
-        indexerShooter.set(ControlMode.PercentOutput, toshooterPower); //Sets the To Shooter Motor
     }
 
 

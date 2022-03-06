@@ -42,7 +42,7 @@ public class Drive {
         setBrakeMode(false);
 
         //Set up Pneumatics
-        shiftGear = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Map.Drive.shiftIn,Map.Drive.shiftOut);
+        shiftGear = new DoubleSolenoid(PneumaticsModuleType.REVPH, Map.Drive.shiftIn,Map.Drive.shiftOut);
         shiftGear.set(Value.kReverse);
 
 

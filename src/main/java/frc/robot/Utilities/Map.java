@@ -9,26 +9,30 @@ public class Map{
 
     public static class Drive{
         public static final int //Motor IDs
-            leftMain = 0, leftFollow = 1,
-            rightMain = 2, rightFollow = 3;
+            leftMain = 10, leftFollow = 11,
+            rightMain = 12, rightFollow = 13;
 
         public static final int //Pneumatics Shifters
-            shiftIn = 0, shiftOut = 1;
+            shiftIn = 14, shiftOut = 11;
     }
 
     public static class Intake{
         public static final int //ID for Motors
-            intakeMotor = 4, indexMain = 5, indexShooter = 6; 
+            intakeMotor = 8, indexMain = 9, indexShooter = 7; 
         
         public static final int //ID for Pneumatics
-            indexerIn = 2, indexerOut = 3;
+            indexerIn = 10, indexerOut = 13;
     }
     
     public static class Shooter{
         public static final int 
-            topShooterMotor = 8, btmShooterMotor = 7;
+            topShooterMotor = 31, btmShooterMotor = 32;
         public static final int
-            hoodIn = 4, hoodOut = 5;
+            hoodIn = 15, hoodOut = 12;
     }
 
+    public static class Climber{
+        public static final int
+            leftMotor = 21, rightMotor = 22;
+    }
 }

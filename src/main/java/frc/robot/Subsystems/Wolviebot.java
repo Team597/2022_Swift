@@ -7,10 +7,12 @@ public class Wolviebot {
 
     private Drive drive;
     private CargoHandler cargo;
+    private Climber climber;
 
     public Wolviebot(){
         drive = new Drive();
         cargo = new CargoHandler();
+        climber = new Climber();
     }
 
     public void Driver(XboxController controller){
@@ -31,18 +33,30 @@ public class Wolviebot {
     public void Operator(XboxController controller){
         boolean intake = controller.getAButton();
         boolean outtake = controller.getXButton();
+       
         boolean shooting = (controller.getRightTriggerAxis() > 0.5 ? true : false);
         boolean lowShot = controller.getRightBumper();
         boolean highShot = controller.getLeftBumper();
+       
+        double climbAxis = controller.getLeftY();
+        boolean emergencyClimbOverride = controller.getStartButton();
+        int climbPOV = controller.getPOV(0); //0 is up, 180 is Down
         
+        //Drive The Climber
+        if(emergencyClimbOverride){
+            climber.DriveClimber(climbAxis);
+        }else {
+            climber.ClimbTime(climbPOV);
+        }
         
+
         //Drive the Intake
         cargo.DriveIntake(intake, outtake);
         
         //Shooting Time
         double velocity = 10000;
         if(cargo.LowShot){
-            velocity = velocity * 0.6;
+            velocity = velocity * 0.8;
         }
         cargo.VelocityShot(shooting, velocity);
 
