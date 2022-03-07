@@ -1,6 +1,8 @@
 package frc.robot.Subsystems;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Utilities.ToggleButton;
 
 public class Wolviebot {
     private static Wolviebot instance = null;
@@ -9,10 +11,14 @@ public class Wolviebot {
     private CargoHandler cargo;
     private Climber climber;
 
+    private ToggleButton emergencyClimbOverride = null;
+
     public Wolviebot(){
         drive = new Drive();
         cargo = new CargoHandler();
         climber = new Climber();
+
+        emergencyClimbOverride = new ToggleButton();
     }
 
     public void Driver(XboxController controller){
@@ -38,16 +44,17 @@ public class Wolviebot {
         boolean lowShot = controller.getRightBumper();
         boolean highShot = controller.getLeftBumper();
        
-        double climbAxis = controller.getLeftY();
-        boolean emergencyClimbOverride = controller.getStartButton();
+        double climbAxis = -controller.getLeftY();
+        boolean climbEmergency = controller.getStartButton();
         int climbPOV = controller.getPOV(0); //0 is up, 180 is Down
         
         //Drive The Climber
-        if(emergencyClimbOverride){
+        if(emergencyClimbOverride.Input(climbEmergency)){
             climber.DriveClimber(climbAxis);
         }else {
             climber.ClimbTime(climbPOV);
         }
+        SmartDashboard.putBoolean("Emergency Climber", emergencyClimbOverride.Output());
         
 
         //Drive the Intake

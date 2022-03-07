@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Utilities.Map;
 
 public class Climber {
@@ -37,6 +38,7 @@ public class Climber {
 
     public void DriveClimber(double climbPower){
         leftMotor.set(ControlMode.PercentOutput, climbPower);
+        SmartDashboard.putNumber("Left Climb", leftMotor.getSelectedSensorPosition());
         //rightMotor.set(ControlMode.PercentOutput, climbPower);
     }
 
@@ -61,11 +63,12 @@ public class Climber {
         if(climbLevel==0){
             climbPosition = 0;
         }else if(climbLevel == 1){
-            climbPosition = 1000;
+            climbPosition = 140000;
         } else if(climbLevel == 2){
-            climbPosition = 3000;
+            climbPosition = 289086;
         }
         leftMotor.set(TalonFXControlMode.MotionMagic, climbPosition);
+        SmartDashboard.putNumber("Left Climb", leftMotor.getSelectedSensorPosition());
     }
     
 
