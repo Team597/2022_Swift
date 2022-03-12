@@ -12,6 +12,8 @@ public class Wolviebot {
     private Climber climber;
 
     private ToggleButton emergencyClimbOverride = null;
+    private int AutoTicker = 0;
+
 
     public Wolviebot(){
         drive = new Drive();
@@ -19,6 +21,12 @@ public class Wolviebot {
         climber = new Climber();
 
         emergencyClimbOverride = new ToggleButton();
+        AutoTicker = 0;
+    }
+
+    public void AutoInit(){
+        AutoTicker = 0;
+        cargo.StopShooter();
     }
 
     public void Driver(XboxController controller){
@@ -61,9 +69,9 @@ public class Wolviebot {
         cargo.DriveIntake(intake, outtake);
         
         //Shooting Time
-        double velocity = 10000;
+        double velocity = 9500;//10000
         if(cargo.LowShot){
-            velocity = velocity * 0.8;
+            velocity = velocity * 0.65;
         }
         cargo.VelocityShot(shooting, velocity);
 
@@ -75,6 +83,29 @@ public class Wolviebot {
             whichShot = 2;
         }
         cargo.HoodControl(whichShot);
+    }
+
+    public void AutoTime(){
+        AutoTicker++;
+        int powerShot = 0; //6500
+        boolean shooting = false;
+        cargo.HoodControl(1);
+        if(AutoTicker>= 30 && AutoTicker<=200){
+            powerShot = 6500;
+            shooting = true;
+            cargo.VelocityShot(shooting, powerShot);
+        } else{
+            powerShot = 0;
+            shooting = false;
+            cargo.StopShooter();
+            if(AutoTicker>=200 && AutoTicker<=350){
+                drive.curvieDrive(0.3, 0, false);
+            } else{
+                drive.curvieDrive(0, 0, false);
+            }
+        }
+        //cargo.VelocityShot(shooting, powerShot);
+        
     }
 
 

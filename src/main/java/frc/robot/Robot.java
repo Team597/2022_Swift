@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Subsystems.Wolviebot;
@@ -25,23 +26,29 @@ public class Robot extends TimedRobot {
   private static XboxController mainJoystick = null;
   private static XboxController coJoystick = null;
   private Wolviebot robot = null;
+  UsbCamera frontCamera, insideCamera;
 
   @Override
   public void robotInit() {
     mainJoystick = new XboxController(Map.Main.mainPad);
     coJoystick = new XboxController(Map.Main.coPad);
     robot = new Wolviebot();
-    CameraServer.startAutomaticCapture();
+    frontCamera = CameraServer.startAutomaticCapture(0);
+    insideCamera = CameraServer.startAutomaticCapture(1);
   }
 
   @Override
   public void robotPeriodic() {}
 
   @Override
-  public void autonomousInit() {}
+  public void autonomousInit() {
+    robot.AutoInit();
+  }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    robot.AutoTime();
+  }
 
   @Override
   public void teleopInit() {}

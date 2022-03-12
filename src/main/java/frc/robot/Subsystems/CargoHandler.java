@@ -71,11 +71,19 @@ public class CargoHandler {
         }
     }
 
+
+    public void StopShooter(){
+        shooterTop.set(ControlMode.PercentOutput, 0.0);
+        shooterBottom.set(ControlMode.PercentOutput, 0.0);
+        indexerShooter.set(ControlMode.PercentOutput, 0.0);
+        indexerMain.set(ControlMode.PercentOutput, 0.0);
+    }
     public void VelocityShot(boolean shooting, double velocity){
         //Variables Section
         double indexPower = 0.0; //Indexer
         double toshooterPower = 0.0; //Indexer to Shooter
         double shooterPower = 0.0; //Shooter
+
 
         if(shooting){ // If the Shooter is suppose to run
             isShooting = true; //Important to turn off other buttons
@@ -98,7 +106,7 @@ public class CargoHandler {
             indexerMain.set(ControlMode.PercentOutput, indexPower); //Sets the Indexer Motor
             indexerShooter.set(ControlMode.PercentOutput, toshooterPower); //Sets the To Shooter Motor
         } else{//Stops Shooter Motors
-            shooterTop.set(ControlMode.PercentOutput, -shooterPower);
+           shooterTop.set(ControlMode.PercentOutput, -shooterPower);
             shooterBottom.set(ControlMode.PercentOutput,shooterPower);
         }
     }
