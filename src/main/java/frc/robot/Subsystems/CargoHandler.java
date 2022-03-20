@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Utilities.Map;
 
 public class CargoHandler {
@@ -50,7 +51,7 @@ public class CargoHandler {
         if(intaking){
             intakeSolenoid.set(Value.kForward);
             indexIntakePower = 0.75;
-            intakePower = 0.9;
+            intakePower = 0.8;
             indexShooterPower = 1.0;
         } else if(outaking){
             intakeSolenoid.set(Value.kForward);
@@ -78,16 +79,26 @@ public class CargoHandler {
         indexerShooter.set(ControlMode.PercentOutput, 0.0);
         indexerMain.set(ControlMode.PercentOutput, 0.0);
     }
+
+    public void FullPowerShot(boolean shooting){
+        if(shooting){
+            shooterTop.set(ControlMode.PercentOutput, 1.0);
+            shooterBottom.set(ControlMode.PercentOutput, -1.0);
+        }
+
+    }
+
     public void VelocityShot(boolean shooting, double velocity){
         //Variables Section
         double indexPower = 0.0; //Indexer
         double toshooterPower = 0.0; //Indexer to Shooter
         double shooterPower = 0.0; //Shooter
 
+        SmartDashboard.putNumber("~Shooter RPM", velocity);
 
         if(shooting){ // If the Shooter is suppose to run
             isShooting = true; //Important to turn off other buttons
-            if(shooterBottom.getSelectedSensorVelocity() >= velocity-100){ //Only Checks the Bottom Motor's Velocity 
+            if(shooterBottom.getSelectedSensorVelocity() >= velocity-50){ //Only Checks the Bottom Motor's Velocity 
                 BangBang++;
             }
             if(BangBang>=10){ //Activates the Belts to feed to shooter
@@ -111,6 +122,13 @@ public class CargoHandler {
         }
     }
 
+    public void RevShooter(boolean control){
+        if(control){
+            double velocity = 9500;
+            shooterTop.set(ControlMode.Velocity,-velocity);
+            shooterBottom.set(ControlMode.Velocity,velocity);
+        }
+    }
 
 
     //Hood Control, int mode is either 0 for nothing, 1 for Hood Down, 2 for Hood Up
@@ -121,6 +139,7 @@ public class CargoHandler {
             case 2: LowShot = false;
             break;
         }
+        SmartDashboard.putBoolean("Low Shot", LowShot);
         if(LowShot){
             //Have the Hood Down with Pneumatics
             hoodSolenoid.set(Value.kForward);
@@ -137,10 +156,10 @@ public class CargoHandler {
         motor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,10);//Configuring the Sensor
         
         motor.config_kF(0, 1023.0/20660.0); //Feed-Forward
-        motor.config_kP(0, 0.1);//Proportional
-        motor.config_kI(0, 0.001);//Iterative
-        motor.config_kD(0, 2.0);//Derivative
-        motor.config_IntegralZone(0, 500);//Intergral Zone
+        motor.config_kP(0, 0.15);//Proportional 0.1
+        motor.config_kI(0, 0.003);//Iterative 0.001
+        motor.config_kD(0, 2.5);//Derivative 2.0
+        motor.config_IntegralZone(0, 300);//Intergral Zone 500
         motor.configClosedLoopPeakOutput(0, 1.00);// Closed-Look Peak Output
 
         motor.getSensorCollection().setIntegratedSensorPosition(0, 10); //Resets the Position to 0

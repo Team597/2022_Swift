@@ -8,6 +8,8 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Subsystems.Wolviebot;
 import frc.robot.Utilities.Map;
 
@@ -28,6 +30,13 @@ public class Robot extends TimedRobot {
   private Wolviebot robot = null;
   UsbCamera frontCamera, insideCamera;
 
+
+  private enum StartingPosition{
+    ONE_BALL_LOW,TWO_BALL_HIGH,THREE_BALL_HIGH//FOUR_BALL_HIGH,ONE_BALL_HIGH
+  };
+  private StartingPosition selectedAuto;
+  private final SendableChooser<StartingPosition> autoChooser = new SendableChooser<>();
+
   @Override
   public void robotInit() {
     mainJoystick = new XboxController(Map.Main.mainPad);
@@ -35,6 +44,11 @@ public class Robot extends TimedRobot {
     robot = new Wolviebot();
     frontCamera = CameraServer.startAutomaticCapture(0);
     insideCamera = CameraServer.startAutomaticCapture(1);
+
+    autoChooser.setDefaultOption("One Ball Low (Default)", StartingPosition.ONE_BALL_LOW);
+    autoChooser.addOption("Two Balls High", StartingPosition.TWO_BALL_HIGH);
+    autoChooser.addOption("Three Balls High", StartingPosition.THREE_BALL_HIGH);
+    SmartDashboard.putData("Auto Choices", autoChooser);
   }
 
   @Override
@@ -43,18 +57,34 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     robot.AutoInit();
+    selectedAuto = autoChooser.getSelected();
   }
 
   @Override
   public void autonomousPeriodic() {
-    robot.AutoTime();
+    robot.LimeUpdate();
+    switch(selectedAuto){
+      case ONE_BALL_LOW:
+        robot.SingleLowBall();
+        break;
+      case TWO_BALL_HIGH:
+        robot.TwoHighBall();
+        break;
+      case THREE_BALL_HIGH:
+        robot.ThreeHighBall();
+        break;
+    }
+    
   }
 
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    robot.TeleInit();
+  }
 
   @Override
   public void teleopPeriodic() {
+    robot.LimeUpdate();
     robot.Driver(mainJoystick);
     robot.Operator(coJoystick);
   }

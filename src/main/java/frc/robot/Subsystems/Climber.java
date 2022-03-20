@@ -98,8 +98,8 @@ public class Climber {
 		motor.config_kD(kSlotIdx, 0.0, kTimeoutMs);
 
 		/* Set acceleration and vcruise velocity - see documentation */
-		motor.configMotionCruiseVelocity(20000, kTimeoutMs);//15000
-		motor.configMotionAcceleration(10000, kTimeoutMs);//6000
+		motor.configMotionCruiseVelocity(35000, kTimeoutMs);//15000
+		motor.configMotionAcceleration(20000, kTimeoutMs);//6000
 
 		/* Zero the sensor once on robot boot up */
 		motor.setSelectedSensorPosition(0, kPIDLoopIdx, kTimeoutMs);
