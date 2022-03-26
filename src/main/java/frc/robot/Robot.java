@@ -32,7 +32,7 @@ public class Robot extends TimedRobot {
 
 
   private enum StartingPosition{
-    ONE_BALL_LOW,TWO_BALL_HIGH,THREE_BALL_HIGH//FOUR_BALL_HIGH,ONE_BALL_HIGH
+    ONE_BALL_LOW,TWO_BALL_HIGH,THREE_BALL_HIGH,FIVE_BALLS
   };
   private StartingPosition selectedAuto;
   private final SendableChooser<StartingPosition> autoChooser = new SendableChooser<>();
@@ -48,6 +48,7 @@ public class Robot extends TimedRobot {
     autoChooser.setDefaultOption("One Ball Low (Default)", StartingPosition.ONE_BALL_LOW);
     autoChooser.addOption("Two Balls High", StartingPosition.TWO_BALL_HIGH);
     autoChooser.addOption("Three Balls High", StartingPosition.THREE_BALL_HIGH);
+    autoChooser.addOption("Five Ball Dream", StartingPosition.FIVE_BALLS);
     SmartDashboard.putData("Auto Choices", autoChooser);
   }
 
@@ -73,6 +74,9 @@ public class Robot extends TimedRobot {
       case THREE_BALL_HIGH:
         robot.ThreeHighBall();
         break;
+      case FIVE_BALLS:
+        robot.HighHopes();
+        break;
     }
     
   }
@@ -80,11 +84,13 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     robot.TeleInit();
+    //robot.TestInit();
   }
 
   @Override
   public void teleopPeriodic() {
     robot.LimeUpdate();
+    //robot.TestOperator(coJoystick);
     robot.Driver(mainJoystick);
     robot.Operator(coJoystick);
   }
@@ -96,8 +102,12 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {}
 
   @Override
-  public void testInit() {}
+  public void testInit() {
+    robot.TestInit();
+  }
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    
+  }
 }

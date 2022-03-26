@@ -1,5 +1,7 @@
 package frc.robot.Subsystems;
 
+import javax.xml.xpath.XPathVariableResolver;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Utilities.ToggleButton;
@@ -15,6 +17,7 @@ public class Wolviebot {
     private ToggleButton emergencyClimbOverride = null;
     private int AutoTicker = 0;
     private boolean autoShooting = false;
+    public double TargetShootetPower = 9500;
 
 
     public Wolviebot(){
@@ -49,7 +52,7 @@ public class Wolviebot {
             cargo.RevShooter(true);
             if(autoTurn<0.2 && autoTurn > -0.2){
                 cargo.RevShooter(false);
-                cargo.VelocityShot(true, lime.AimY());
+                cargo.VelocityShot(true, lime.SmartShot());
                 cargo.HoodControl(2);
             }
         } else{
@@ -61,6 +64,41 @@ public class Wolviebot {
 
     public void TeleInit(){
         drive.setBrakeMode(false);
+    }
+
+    public void TestInit(){
+        TargetShootetPower = 9500;
+    }
+
+    public void TestOperator(XboxController controller){
+        boolean shooting = (controller.getRightTriggerAxis() > 0.5 ? true : false);
+        boolean toShooter = (controller.getLeftTriggerAxis() > 0.5 ? true : false);
+        boolean intake = controller.getAButton();
+        boolean outtake = controller.getXButton();
+        boolean raiseTarget = controller.getRightBumperReleased();
+        boolean lowerTarget = controller.getLeftBumperReleased();
+
+        lime.UpdateLimelight();
+        lime.SmartShot();
+
+        if(raiseTarget){
+            TargetShootetPower += 100;
+        }
+        if(lowerTarget){
+            TargetShootetPower -= 100;
+        }
+
+        SmartDashboard.putNumber("Test Target Power", TargetShootetPower);
+
+        if(intake||outtake){
+            cargo.DriveIntake(intake, outtake);
+        }else{
+            cargo.TestToShooter(toShooter);
+        }
+        cargo.TestVelocity(shooting, lime.SmartShot());
+        if(!shooting){
+        //    cargo.DriveIntake(false, false);
+        }
     }
 
     public void Operator(XboxController controller){
@@ -129,7 +167,7 @@ public class Wolviebot {
         drive.setBrakeMode(true);
     }
 
-    public void SingleLowBall(){
+    public void SingleLowBall(){//Shoots the ball for 150 ticks then drives forward for 50 ticks, then stops
         AutoTicker++;
         int powerShot = 0; //6500
         boolean shooting = false;
@@ -152,21 +190,21 @@ public class Wolviebot {
 
     public void TwoHighBall(){
         AutoTicker++;
-        if(AutoTicker>=0 && AutoTicker<=70){
+        if(AutoTicker>=0 && AutoTicker<=90){
             cargo.DriveIntake(true, false);
-            drive.curvieDrive(0.55, 0.0, true);
+            drive.curvieDrive(0.4, 0.0, true);
             cargo.RevShooter(true);
-        } else if(AutoTicker>=60&&AutoTicker<=80){
+        } else if(AutoTicker>=90&&AutoTicker<=100){
             cargo.HoodControl(2);
             cargo.RevShooter(true);
             cargo.DriveIntake(false, false);
             drive.curvieDrive(0.0, 0.0, true);
-        } else if(AutoTicker>=80&&AutoTicker<=200){
+        } else if(AutoTicker>=100&&AutoTicker<=240){
             cargo.HoodControl(2);
             cargo.DriveIntake(false, false);
             drive.curvieDrive(0.0, lime.AimX(), true);
             cargo.RevShooter(false);
-            cargo.VelocityShot(true, lime.AimY());
+            cargo.VelocityShot(true, lime.SmartShot());
         } else{
             cargo.DriveIntake(false, false);
             drive.curvieDrive(0.0, 0.0, true);
@@ -175,6 +213,72 @@ public class Wolviebot {
     }
 
     public void ThreeHighBall(){
+        if(AutoTicker<245){
+            TwoHighBall();
+        }else{
+            AutoTicker++;
+            if(AutoTicker>=250 && AutoTicker<=280){ //Turn
+                drive.curvieDrive(0.0, 0.5, true);
+            } else if(AutoTicker>=280 && AutoTicker<=300){//Stop
+                drive.curvieDrive(0.0, 0.0, true);
+            } else if(AutoTicker>=300 && AutoTicker<=400){//Drive Forward and Intake
+                cargo.DriveIntake(true, false);
+                drive.curvieDrive(0.4, 0.0, true);
+                cargo.RevShooter(true);
+            }else if(AutoTicker>=400&&AutoTicker<=420){ //Stop
+                cargo.HoodControl(2);
+                cargo.RevShooter(true);
+                cargo.DriveIntake(false, false);
+                drive.curvieDrive(0.0, 0.0, true);
+            } else if(AutoTicker>=420 && AutoTicker<=450){ //Turn
+                drive.curvieDrive(0.0, -0.5, true);
+            } else if(AutoTicker>=450 && AutoTicker<=490){//Shoot
+                drive.curvieDrive(0.0, lime.AimX(), true);
+                cargo.RevShooter(false);
+                cargo.VelocityShot(true, lime.SmartShot());
+            }else{ // STOP ALL
+                cargo.DriveIntake(false, false);
+                drive.curvieDrive(0.0, 0.0, true);
+                cargo.VelocityShot(false, 0);
+            }
+        }
+    }
+
+    public void HighHopes(){
+        if(AutoTicker<=500){
+            ThreeHighBall();
+        }else{
+            AutoTicker++;
+            if(AutoTicker>=500 && AutoTicker<=520){//TURN
+                drive.curvieDrive(0.0, 0.5, true);
+            } else if(AutoTicker>=520 && AutoTicker<=530){//Stop
+                drive.curvieDrive(0.0, 0.0, true);
+            } else if(AutoTicker>=530 && AutoTicker<=620){//Drive Forward and Intake
+                cargo.DriveIntake(true, false);
+                drive.curvieDrive(0.4, 0.0, true);
+                cargo.RevShooter(true);
+            }else if(AutoTicker>=630&&AutoTicker<=640){ //Stop
+                cargo.HoodControl(2);
+                cargo.RevShooter(true);
+                cargo.DriveIntake(true, false);
+                drive.curvieDrive(0.0, 0.0, true);
+            } else if(AutoTicker>=640 && AutoTicker<=690){//Drive Backwards
+                cargo.DriveIntake(false, false);
+                drive.curvieDrive(-0.4, 0.0, true);
+                cargo.RevShooter(true);
+            } else if(AutoTicker>=690 && AutoTicker<=750){//Shoot!
+                drive.curvieDrive(0.0, lime.AimX(), true);
+                cargo.RevShooter(false);
+                cargo.VelocityShot(true, lime.SmartShot());
+            }else{
+                cargo.DriveIntake(false, false);
+                drive.curvieDrive(0.0, 0.0, true);
+                cargo.VelocityShot(false, 0);
+            }
+        }
+    }
+
+    /*public void ThreeHighBall(){
         AutoTicker++;
         if(AutoTicker>=0 && AutoTicker<=70){ //DRIVE FORWARD
             cargo.DriveIntake(true, false);
@@ -190,7 +294,7 @@ public class Wolviebot {
             cargo.DriveIntake(false, false);
             drive.curvieDrive(0.0, lime.AimX(), true);
             cargo.RevShooter(false);
-            cargo.VelocityShot(true, lime.AimY());
+            cargo.VelocityShot(true, lime.SmartShot());
         } else if(AutoTicker>=200&&AutoTicker<=220){//STOP
             cargo.HoodControl(2);
             cargo.RevShooter(true);
@@ -224,13 +328,13 @@ public class Wolviebot {
             cargo.DriveIntake(false, false);
             drive.curvieDrive(0.0, lime.AimX(), true);
             cargo.RevShooter(false);
-            cargo.VelocityShot(true, lime.AimY());
+            cargo.VelocityShot(true, lime.SmartShot());
         } else{
             cargo.DriveIntake(false, false);
             drive.curvieDrive(0.0, 0.0, true);
             cargo.VelocityShot(false, 0);
         }
-    }
+    }*/
 
 
 

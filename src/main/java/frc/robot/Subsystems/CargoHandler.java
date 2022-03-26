@@ -88,6 +88,26 @@ public class CargoHandler {
 
     }
 
+    public void TestVelocity(boolean shooting, double velocity){
+        if(shooting){
+            shooterTop.set(ControlMode.Velocity, -velocity);
+            shooterBottom.set(ControlMode.Velocity, velocity);
+        }else {
+            shooterTop.set(ControlMode.PercentOutput, -0);
+            shooterBottom.set(ControlMode.PercentOutput, 0);
+        }
+    }
+
+    public void TestToShooter(boolean shooting){
+        if(shooting){
+            indexerMain.set(ControlMode.PercentOutput, 0.75); //Sets the Indexer Motor
+            indexerShooter.set(ControlMode.PercentOutput, -0.75); //Sets the To Shooter Motor
+        } else{
+            indexerMain.set(ControlMode.PercentOutput, 0); //Sets the Indexer Motor
+            indexerShooter.set(ControlMode.PercentOutput, 0); //Sets the To Shooter Motor
+        }
+    }
+
     public void VelocityShot(boolean shooting, double velocity){
         //Variables Section
         double indexPower = 0.0; //Indexer
@@ -101,9 +121,9 @@ public class CargoHandler {
             if(shooterBottom.getSelectedSensorVelocity() >= velocity-50){ //Only Checks the Bottom Motor's Velocity 
                 BangBang++;
             }
-            if(BangBang>=10){ //Activates the Belts to feed to shooter
+            if(BangBang>=20){ //Activates the Belts to feed to shooter
                 indexPower = 0.75;
-                toshooterPower = -0.9;
+                toshooterPower = -0.75;//Old -0.9
             }
         } else{
             isShooting = false; //Renable other buttons
@@ -124,7 +144,7 @@ public class CargoHandler {
 
     public void RevShooter(boolean control){
         if(control){
-            double velocity = 9500;
+            double velocity = 9600;
             shooterTop.set(ControlMode.Velocity,-velocity);
             shooterBottom.set(ControlMode.Velocity,velocity);
         }
