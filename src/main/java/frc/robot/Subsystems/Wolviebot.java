@@ -95,9 +95,9 @@ public class Wolviebot {
         }else{
             cargo.TestToShooter(toShooter);
         }
-        cargo.TestVelocity(shooting, lime.SmartShot());
+        cargo.TestVelocity(shooting, TargetShootetPower);
         if(!shooting){
-        //    cargo.DriveIntake(false, false);
+            cargo.DriveIntake(false, false);
         }
     }
 
@@ -204,7 +204,7 @@ public class Wolviebot {
             cargo.DriveIntake(false, false);
             drive.curvieDrive(0.0, lime.AimX(), true);
             cargo.RevShooter(false);
-            cargo.VelocityShot(true, lime.SmartShot());
+            cargo.VelocityShot(true, lime.SmartShot()+200);
         } else{
             cargo.DriveIntake(false, false);
             drive.curvieDrive(0.0, 0.0, true);
@@ -213,35 +213,51 @@ public class Wolviebot {
     }
 
     public void ThreeHighBall(){
-        if(AutoTicker<245){
-            TwoHighBall();
-        }else{
-            AutoTicker++;
-            if(AutoTicker>=250 && AutoTicker<=280){ //Turn
-                drive.curvieDrive(0.0, 0.5, true);
-            } else if(AutoTicker>=280 && AutoTicker<=300){//Stop
-                drive.curvieDrive(0.0, 0.0, true);
-            } else if(AutoTicker>=300 && AutoTicker<=400){//Drive Forward and Intake
-                cargo.DriveIntake(true, false);
-                drive.curvieDrive(0.4, 0.0, true);
-                cargo.RevShooter(true);
-            }else if(AutoTicker>=400&&AutoTicker<=420){ //Stop
-                cargo.HoodControl(2);
-                cargo.RevShooter(true);
-                cargo.DriveIntake(false, false);
-                drive.curvieDrive(0.0, 0.0, true);
-            } else if(AutoTicker>=420 && AutoTicker<=450){ //Turn
-                drive.curvieDrive(0.0, -0.5, true);
-            } else if(AutoTicker>=450 && AutoTicker<=490){//Shoot
-                drive.curvieDrive(0.0, lime.AimX(), true);
-                cargo.RevShooter(false);
-                cargo.VelocityShot(true, lime.SmartShot());
-            }else{ // STOP ALL
-                cargo.DriveIntake(false, false);
-                drive.curvieDrive(0.0, 0.0, true);
-                cargo.VelocityShot(false, 0);
-            }
+        AutoTicker++;
+        if(AutoTicker>=0 && AutoTicker<=90){
+            cargo.DriveIntake(true, false);
+            drive.curvieDrive(0.3, 0.0, true);
+            cargo.RevShooter(true);
+        } else if(AutoTicker>=90&&AutoTicker<=100){
+            cargo.HoodControl(2);
+            cargo.RevShooter(true);
+            cargo.DriveIntake(false, false);
+            drive.curvieDrive(0.0, 0.0, true);
+        } else if(AutoTicker>=100&&AutoTicker<=240){
+            cargo.HoodControl(2);
+            cargo.DriveIntake(false, false);
+            drive.curvieDrive(0.0, lime.AimX(), true);
+            cargo.RevShooter(false);
+            cargo.VelocityShot(true, lime.SmartShot()+200);
+        } else if(AutoTicker>=240&&AutoTicker<=250){
+            cargo.DriveIntake(false, false);
+            drive.curvieDrive(0.0, 0.0, true);
+            cargo.VelocityShot(false, 0);
+        }else if(AutoTicker>=250 && AutoTicker<=280){ //Turn
+            drive.curvieDrive(0.0, 0.6, true);
+        } else if(AutoTicker>=280 && AutoTicker<=300){//Stop
+            drive.curvieDrive(0.0, 0.0, true);
+        } else if(AutoTicker>=300 && AutoTicker<=415){//Drive Forward and Intake
+            cargo.DriveIntake(true, false);
+            drive.curvieDrive(0.67, 0.0, true);
+            cargo.RevShooter(true);
+        }else if(AutoTicker>=415&&AutoTicker<=420){ //Stop
+            cargo.HoodControl(2);
+            cargo.RevShooter(true);
+            drive.curvieDrive(0.0, 0.0, true);
+        } else if(AutoTicker>=420 && AutoTicker<=470){ //Turn
+            cargo.DriveIntake(false, false);
+            drive.curvieDrive(-0.25, -0.4, true);
+        } else if(AutoTicker>=470 && AutoTicker<=550){//Shoot
+            drive.curvieDrive(0.0, lime.AimX(), true);
+            cargo.RevShooter(false);
+            cargo.VelocityShot(true, lime.SmartShot());
+        }else{ // STOP ALL
+            cargo.DriveIntake(false, false);
+            drive.curvieDrive(0.0, 0.0, true);
+            cargo.VelocityShot(false, 0);
         }
+    
     }
 
     public void HighHopes(){

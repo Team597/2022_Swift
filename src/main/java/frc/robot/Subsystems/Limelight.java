@@ -41,9 +41,20 @@ public class Limelight {
     public double SmartShot(){
         double powerOutput = 9500;
         if(lV >= 1.0){
-            powerOutput = (-6.3127*Math.pow(lY, 3)) + (251.17*Math.pow(lY,2)) - 3272.9*lY + 23679; 
+            
+            //LA Practice Day//y = -0.1979x5 + 3.5111x4 + 0.6421x3 - 118.2x2 - 468.89x + 12878
+            //If limelight reads a height greater than 4, cap the speed to 9600
+            if(lY>=4){
+                powerOutput = 9600;
+            }else{
+                //use 5th polynomial equation if limelight reads height less than or equal to 4.
+                powerOutput = -(0.1979*Math.pow(lY, 5)) + (3.5111*Math.pow(lY, 4)) + (0.6421*Math.pow(lY, 3)) - (118.2*Math.pow(lY, 2)) - (468.89*lY) + 12878;
+            }
+            //PRE LA REGIONAL FROM 4201 TESTS//-0.2273x4 + 4.5434x3 + 10.362x2 - 599.12x + 12311
+            //powerOutput = (-0.2273*Math.pow(lY, 4)) + (4.5434*Math.pow(lY, 3)) + (10.362*Math.pow(lY, 2)) - (599.12*lY) + 12311;
+            //OLD PRE 3d PRINT powerOutput = (-6.3127*Math.pow(lY, 3)) + (251.17*Math.pow(lY,2)) - 3272.9*lY + 23679; 
         }
-        powerOutput = Math.min(Math.max(powerOutput, 9400),20000);
+        powerOutput = Math.min(Math.max(powerOutput, 9400),20000)+100;
         SmartDashboard.putNumber("Smart Power", powerOutput);
         return powerOutput;
     }
